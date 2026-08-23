@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catatan Kehidupan</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --gold:#e8c98d;--cream:#f5eee4;--muted:#d0c6b8;
+  --glass:rgba(35,28,22,.52);--line:rgba(240,220,190,.28)
+}
+body{
+  min-height:100vh;background:#17120e;color:var(--cream);
+  font-family:Georgia,"Times New Roman",serif;overflow-x:hidden
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:-20%;
+  z-index:-3;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(214,170,96,.20), transparent 28%),
+    radial-gradient(circle at 80% 30%, rgba(94,126,150,.18), transparent 30%),
+    radial-gradient(circle at 50% 85%, rgba(167,105,70,.16), transparent 32%),
+    linear-gradient(125deg,#0b0b0d,#17130f,#0d1115,#1a1510);
+  background-size:140% 140%,140% 140%,140% 140%,300% 300%;
+  animation:backgroundMove 18s ease-in-out infinite alternate;
+  filter:saturate(.9);
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  background:radial-gradient(circle at 50% 40%, transparent 0, rgba(0,0,0,.08) 45%, rgba(0,0,0,.38) 100%);
+}
+header{
+  position:fixed;top:0;left:0;right:0;height:92px;z-index:50;
+  padding:18px 4.5%;display:flex;align-items:center;gap:30px;
+  background:linear-gradient(to bottom,rgba(8,7,6,.55),transparent);
+}
+.brand{display:flex;align-items:center;gap:11px;min-width:265px}
+.brand-icon{font-size:38px;color:var(--gold);animation:float 4s ease-in-out infinite}
+.brand-title{font-size:21px;font-weight:500}
+.brand-sub{font:12px Arial,sans-serif;color:#cfc4b5;margin-top:4px}
+nav{display:flex;align-items:center;gap:38px;margin:auto}
+nav a{position:relative;color:#eee6dc;text-decoration:none;font:14px Arial,sans-serif}
+nav a.active::after{
+  content:"";position:absolute;left:0;right:0;bottom:-13px;width:21px;height:2px;margin:auto;
+  background:var(--gold);box-shadow:0 0 12px var(--gold)
+}
+.tools{display:flex;gap:9px}
+.tool{
+  width:45px;height:45px;border-radius:50%;border:1px solid var(--line);
+  background:rgba(35,28,22,.38);color:#fff;cursor:pointer;
+  font-size:19px;backdrop-filter:blur(12px);transition:.3s
+}
+.tool:hover{transform:translateY(-3px) scale(1.05);border-color:var(--gold)}
+.hero{
+  min-height:780px;padding:170px 5% 65px;
+  display:grid;grid-template-columns:1.1fr .9fr;gap:45px;align-items:center
+}
+.kicker{font:10px Arial,sans-serif;letter-spacing:5px;color:#d6c4ad;margin-bottom:24px}
+h1{font-size:clamp(43px,5vw,75px);font-weight:400;line-height:1.12;letter-spacing:-1px}
+h1 .gold{color:var(--gold)}
+.intro{max-width:530px;font:15px/1.9 Arial,sans-serif;color:#ddd4c8;margin:30px 0 27px}
+.cta{
+  display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:17px;
+  border:1px solid var(--line);background:rgba(48,39,30,.48);color:#f4e7d6;
+  text-decoration:none;font:13px Arial,sans-serif;backdrop-filter:blur(12px);transition:.3s
+}
+.cta:hover{transform:translateY(-3px);border-color:var(--gold)}
+.glass{
+  background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(30,24,19,.48));
+  border:1px solid var(--line);box-shadow:0 18px 55px rgba(0,0,0,.3);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)
+}
+.player{max-width:385px;margin-left:auto;border-radius:23px;padding:23px}
+.cover{
+  height:145px;border-radius:14px;overflow:hidden;
+  background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.35)),url("background.png") center 30%/cover
+}
+.song-row{display:flex;justify-content:space-between;align-items:end;margin:18px 0 15px}
+.song-row h2{font-size:22px;font-weight:400}.song-row p{font:12px Arial;color:#cfc3b4;margin-top:6px}
+.eq{display:flex;gap:4px;height:30px;align-items:end}
+.eq span{width:4px;border-radius:4px;background:var(--gold);animation:eq 1s infinite alternate}
+.eq span:nth-child(1){height:11px}.eq span:nth-child(2){height:24px;animation-delay:.1s}
+.eq span:nth-child(3){height:15px;animation-delay:.2s}.eq span:nth-child(4){height:28px;animation-delay:.3s}
+.eq span:nth-child(5){height:19px;animation-delay:.4s}.eq span:nth-child(6){height:10px;animation-delay:.5s}
+.progress{height:3px;background:rgba(255,255,255,.25);margin:22px 0 8px;position:relative}
+.progress::before{content:"";position:absolute;width:34%;height:100%;background:#e4c486}
+.times{display:flex;justify-content:space-between;font:10px Arial;color:#cfc4b6}
+.player-controls{display:flex;align-items:center;justify-content:space-around;margin-top:20px}
+.player-controls button{background:none;border:0;color:#eee;font-size:19px;cursor:pointer}
+.play{
+  width:56px;height:56px;border-radius:50%!important;border:1px solid var(--gold)!important;
+  background:rgba(218,178,107,.17)!important;color:#ffe7bd!important
+}
+.player-note{font:12px Arial;color:#cfc4b6;margin-top:20px}
+.section{max-width:1120px;margin:auto;padding:60px 5% 100px}
+.section-head{text-align:center;margin-bottom:38px}
+.section-head h2{font-size:37px;font-weight:400}
+.section-head p{font:13px Arial;color:#cfc5b9;margin-top:9px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{border-radius:18px;padding:25px;display:flex;gap:20px;min-height:142px;transition:.35s}
+.card:hover{transform:translateY(-5px);border-color:rgba(232,201,141,.65)}
+.icon{
+  width:58px;height:58px;flex:0 0 58px;border-radius:50%;display:grid;place-items:center;
+  color:var(--gold);font-size:27px;border:1px solid rgba(232,201,141,.38);
+  background:rgba(232,201,141,.07);animation:float 4s ease-in-out infinite
+}
+.card:nth-child(2) .icon{animation-delay:.3s}.card:nth-child(3) .icon{animation-delay:.6s}
+.card:nth-child(4) .icon{animation-delay:.9s}.card:nth-child(5) .icon{animation-delay:1.2s}
+.card:nth-child(6) .icon{animation-delay:1.5s}
+.card h3{font-size:20px;font-weight:400;margin-bottom:9px}
+.card p{font:12px/1.75 Arial,sans-serif;color:#cbc1b5}
+.quote{max-width:900px;margin:28px auto 0;border-radius:22px;padding:38px 45px;text-align:center}
+.quote p{font-size:22px;line-height:1.65}.quote .gold{color:var(--gold)}
+footer{text-align:center;padding:40px 20px 65px;font:12px Arial;color:#bdb2a6}
+.social{display:flex;justify-content:center;gap:12px;margin-top:20px}
+.social a{
+  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;text-decoration:none;
+  color:#fff;border:1px solid var(--line);background:rgba(35,28,22,.35);
+  backdrop-filter:blur(10px);transition:.3s
+}
+.social a:hover{transform:translateY(-4px);color:var(--gold);border-color:var(--gold)}
+.top{
+  position:fixed;right:28px;bottom:28px;width:50px;height:50px;border-radius:50%;
+  border:1px solid var(--line);background:rgba(35,28,22,.4);color:#fff;
+  cursor:pointer;font-size:20px;backdrop-filter:blur(12px)
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes eq{to{transform:scaleY(.42);opacity:.55}}
+@media(max-width:900px){
+  header{height:76px;padding:14px 20px}.brand{min-width:auto}.brand-title{font-size:16px}.brand-sub{font-size:9px}
+  nav{display:none}.tools{margin-left:auto}
+  .hero{grid-template-columns:1fr;padding:125px 25px 50px;min-height:auto}
+  .player{margin:20px auto 0;width:100%}.cards{grid-template-columns:1fr}
+  .section{padding-left:25px;padding-right:25px}.quote{padding:30px 22px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="brand-icon">◐</div>
+    <div><div class="brand-title">Catatan Kehidupan</div><div class="brand-sub">Setiap langkah adalah cerita.</div></div>
+  </div>
+  <nav>
+    <a class="active" href="#beranda">Beranda</a>
+    <a href="#kata">Kata-Kata</a>
+    <a href="#tentang">Tentang</a>
+    <a href="#galeri">Galeri</a>
+    <a href="#kontak">Kontak</a>
+  </nav>
+  <div class="tools">
+    <button class="tool" title="Cari">⌕</button>
+    <button class="tool" title="Dark / Light" onclick="toggleTheme()" id="theme">☾</button>
+    <button class="tool" title="Musik" onclick="toggleMusic()" id="musicTop">♫</button>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="beranda">
+  <div>
+    <div class="kicker">CATATAN KEHIDUPAN</div>
+    <h1>Hidup bukan tentang<br>menunggu badai berlalu,<br>tapi belajar <span class="gold">menari</span><br>di tengah <span class="gold" style="color:#9ab8c5">hujan.</span></h1>
+    <p class="intro">Akan ada masa ketika semuanya terasa berat. Tapi percayalah, kamu lebih kuat dari yang kamu kira. Teruslah berjalan, meski pelan. Karena setiap langkah kecil hari ini adalah bagian dari masa depan yang sedang kamu bangun.</p>
+    <a class="cta" href="#kata">♡ &nbsp; Ambil yang baik, buang yang buruk</a>
+  </div>
+
+  <div class="player glass">
+    <div class="cover"></div>
+    <div class="song-row">
+      <div><h2>Langit Tenang</h2><p>Musik Kehidupan</p></div>
+      <div class="eq"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+    <div class="progress"></div>
+    <div class="times"><span>01:24</span><span>04:36</span></div>
+    <div class="player-controls">
+      <button>↝</button><button>◀</button>
+      <button class="play" onclick="toggleMusic()" id="play">Ⅱ</button>
+      <button>▶</button><button>↻</button>
+    </div>
+    <div class="player-note">♫ &nbsp; Biarkan musik ini menemanimu</div>
+  </div>
+</section>
+
+<section class="section" id="kata">
+  <div class="section-head">
+    <h2>Kata-Kata Kehidupan</h2>
+    <p>Bacalah pelan-pelan, resapi dengan hati.</p>
+  </div>
+
+  <div class="cards">
+    <article class="card glass"><div class="icon">☆</div><div><h3>Semua Punya Waktunya</h3><p>Jangan terburu-buru membandingkan hidupmu dengan orang lain. Setiap orang punya garis waktu yang berbeda-beda.</p></div></article>
+    <article class="card glass"><div class="icon">♧</div><div><h3>Terus Bertumbuh</h3><p>Tidak apa-apa jika hari ini kamu belum menjadi versi terbaik dirimu. Yang penting, kamu tidak berhenti berusaha untuk menjadi lebih baik.</p></div></article>
+    <article class="card glass"><div class="icon">♡</div><div><h3>Belajar Melepas</h3><p>Ada yang harus pergi, agar kamu bisa melangkah. Melepas bukan berarti menyerah, tapi memahami bahwa tidak semua bisa kamu miliki.</p></div></article>
+    <article class="card glass"><div class="icon">♧</div><div><h3>Percaya Proses</h3><p>Terkadang hidup memang tidak menjelaskan alasannya sekarang. Tapi percayalah, semua sedang dipersiapkan dengan indah.</p></div></article>
+    <article class="card glass"><div class="icon">☼</div><div><h3>Syukuri Hari Ini</h3><p>Kebahagiaan tidak selalu tentang memiliki segalanya, tapi tentang mensyukuri apa yang sudah kamu miliki hari ini.</p></div></article>
+    <article class="card glass"><div class="icon">☾</div><div><h3>Jangan Menyerah</h3><p>Akan ada hari-hari sulit yang menguji kekuatanmu. Tapi ingat, kamu sudah berhasil melewati hari-hari sulit sebelumnya.</p></div></article>
+  </div>
+
+  <div class="quote glass" id="tentang">
+    <p>“ Hiduplah dengan sederhana, tapi berarti.<br>Cintai dengan tulus, tapi tetap jaga diri.<br><span class="gold">Berjuanglah sekuat mungkin, lalu serahkan sisanya pada semesta.</span> ”</p>
+  </div>
+</section>
+</main>
+
+<footer id="kontak">
+  © 2026 Catatan Kehidupan. Semua hak cipta dilindungi.
+  <div class="social" id="galeri">
+    <a href="#" title="Instagram">◎</a><a href="#" title="YouTube">▶</a><a href="#" title="TikTok">♪</a><a href="#" title="Email">✉</a>
+  </div>
+</footer>
+
+<button class="top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<audio id="audio" loop src="musik.mp3"></audio>
+<script>
+function toggleTheme(){
+  document.body.classList.toggle('light');
+  document.getElementById('theme').textContent =
+    document.body.classList.contains('light') ? '☀' : '☾';
+}
+
+const audio = document.getElementById('audio');
+const play = document.getElementById('play');
+const topMusic = document.getElementById('musicTop');
+let musicStarted = false;
+
+function startMusic(){
+  if(musicStarted) return;
+  audio.play().then(()=>{
+    musicStarted = true;
+    play.textContent = 'Ⅱ';
+    topMusic.textContent = 'Ⅱ';
+  }).catch(()=>{});
+}
+
+function toggleMusic(){
+  if(audio.paused){
+    audio.play().then(()=>{
+      musicStarted = true;
+      play.textContent = 'Ⅱ';
+      topMusic.textContent = 'Ⅱ';
+    }).catch(()=>{
+      alert('Musik belum dapat diputar. Pastikan file musik.mp4 ada di folder yang sama dengan index.html.');
+    });
+  }else{
+    audio.pause();
+    play.textContent = '▶';
+    topMusic.textContent = '♫';
+  }
+}
+
+// Coba autoplay saat halaman dibuka.
+// Jika browser memblokir suara, musik otomatis mulai pada klik/tap pertama.
+window.addEventListener('load', ()=>{
+  audio.play().then(()=>{
+    musicStarted = true;
+    play.textContent = 'Ⅱ';
+    topMusic.textContent = 'Ⅱ';
+  }).catch(()=>{});
+});
+
+['click','touchstart','keydown'].forEach(eventName=>{
+  document.addEventListener(eventName, startMusic, {once:true, passive:true});
+});
+
+audio.addEventListener('play', ()=>{
+  play.textContent = 'Ⅱ';
+  topMusic.textContent = 'Ⅱ';
+});
+audio.addEventListener('pause', ()=>{
+  play.textContent = '▶';
+  topMusic.textContent = '♫';
+});
+</script>
+
+<div class="particles" aria-hidden="true"></div>
+<style>
+.particles{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.particle{
+  position:absolute;width:3px;height:3px;border-radius:50%;
+  background:rgba(238,207,151,.72);
+  box-shadow:0 0 10px rgba(238,207,151,.55);
+  animation:particleFloat linear infinite;
+}
+@keyframes backgroundMove{
+  0%{background-position:0% 20%,100% 30%,50% 90%,0% 50%}
+  50%{background-position:35% 55%,70% 5%,20% 55%,100% 50%}
+  100%{background-position:70% 10%,15% 70%,80% 25%,0% 50%}
+}
+@keyframes particleFloat{
+  0%{transform:translate3d(0,30px,0);opacity:0}
+  15%{opacity:.7}
+  50%{transform:translate3d(25px,-45vh,0);opacity:.45}
+  85%{opacity:.7}
+  100%{transform:translate3d(-20px,-100vh,0);opacity:0}
+}
+@media (prefers-reduced-motion: reduce){
+  body::before,.particle{animation:none}
+}
+</style>
+<script>
+const particleLayer=document.querySelector('.particles');
+for(let i=0;i<32;i++){
+  const p=document.createElement('span');
+  p.className='particle';
+  p.style.left=(Math.random()*100)+'%';
+  p.style.top=(55+Math.random()*50)+'%';
+  p.style.animationDuration=(12+Math.random()*18)+'s';
+  p.style.animationDelay=(-Math.random()*25)+'s';
+  p.style.transform=`scale(${0.5+Math.random()*1.4})`;
+  particleLayer.appendChild(p);
+}
+</script>
+
+</body>
+</html>
